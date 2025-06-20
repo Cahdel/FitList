@@ -1,18 +1,18 @@
 // app/(screens)/components/WorkoutItem.jsx
-import React, { useState } from "react";
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  Switch, 
-  Modal, 
-  TextInput, 
-  Alert,
-  ScrollView 
-} from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from '@expo/vector-icons';
+import { Picker } from "@react-native-picker/picker";
+import { useState } from "react";
+import {
+  Alert,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
 
 export default function WorkoutItem({ item, onToggle, onDelete, onUpdate }) {
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -53,18 +53,7 @@ export default function WorkoutItem({ item, onToggle, onDelete, onUpdate }) {
   };
 
   const confirmDelete = () => {
-    Alert.alert(
-      "Hapus Workout",
-      `Apakah Anda yakin ingin menghapus workout "${item.exercise}"?`,
-      [
-        { text: "Batal", style: "cancel" },
-        { 
-          text: "Hapus", 
-          style: "destructive", 
-          onPress: () => onDelete(item.id) 
-        }
-      ]
-    );
+    onDelete(item.id);
   };
 
   return (

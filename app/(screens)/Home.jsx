@@ -1,12 +1,12 @@
 // app/(screens)/Home.jsx
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, StyleSheet } from "react-native";
-import { signOut, onAuthStateChanged } from "firebase/auth";
-import { db, auth } from "../../config/firebase";
-import { collection, onSnapshot, doc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
-import WorkoutList from "./components/WorkoutList";
-import { useRouter } from "expo-router";
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, deleteDoc, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { auth, db } from "../../config/firebase";
+import WorkoutList from "./components/WorkoutList";
 
 export default function Home() {
   const router = useRouter();
@@ -69,22 +69,14 @@ export default function Home() {
   };
 
   const handleLogout = async () => {
-    Alert.alert(
-      "Logout",
-      "Apakah Anda yakin ingin logout?",
-      [
-        { text: "Batal", style: "cancel" },
-        { text: "Logout", style: "destructive", onPress: async () => {
-          try {
-            await signOut(auth);
-            router.replace("/Login");
-          } catch (error) {
-            console.error("Error signing out:", error);
-            Alert.alert("Error", "Gagal logout");
-          }
-        }}
-      ]
-    );
+    console.log("Logging out user:", user?.email);
+    try {
+      await signOut(auth);
+      router.replace("/Login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      Alert.alert("Error", "Gagal logout");
+    }
   };
 
   const completedCount = workouts.filter(w => w.completed).length;
