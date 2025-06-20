@@ -87,7 +87,7 @@ export default function Home() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hello!</Text>
+          <Text style={styles.greeting}>Hello, {user?.email || "User"}</Text>
           <Text style={styles.title}>Workout Tracker</Text>
         </View>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

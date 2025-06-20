@@ -7,7 +7,6 @@ import {
   Modal,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -65,12 +64,16 @@ export default function WorkoutItem({ item, onToggle, onDelete, onUpdate }) {
           </Text>
           <Text style={styles.dayBadge}>{item.day}</Text>
         </View>
-        <Switch 
-          value={item.completed} 
-          onValueChange={() => onToggle(item)}
-          trackColor={{ false: "#e5e7eb", true: "#6c5ce7" }}
-          thumbColor={item.completed ? "#fff" : "#f4f4f4"}
-        />
+        <TouchableOpacity
+          style={styles.checkbox}
+          onPress={() => onToggle(item)}
+        >
+          <Ionicons
+            name={item.completed ? "checkbox" : "square-outline"}
+            size={28}
+            color={item.completed ? "#6c5ce7" : "#b2aaf7"}
+          />
+        </TouchableOpacity>
       </View>
       
       <View style={styles.details}>

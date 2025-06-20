@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Button, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { auth } from "../../config/firebase";
 
 export default function Signup() {
@@ -33,10 +33,10 @@ export default function Signup() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.replace("/Home");
+      router.replace("/Login");
     } catch (error) {
       console.log("Signup error:", error);
-      
+
       if (error.code === "auth/email-already-in-use") {
         setError("Email sudah digunakan");
       } else if (error.code === "auth/invalid-email") {
@@ -51,46 +51,62 @@ export default function Signup() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Daftar</Text>
+      {/* Decorative Header */}
+      <View style={styles.headerBg}>
+        <Image
+          source={{ uri: "https://img.icons8.com/ios-filled/100/ffffff/dumbbell.png" }}
+          style={styles.logo}
+        />
+        <Text style={styles.headerTitle}>FitList</Text>
+      </View>
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <View style={styles.formCard}>
+        <Text style={styles.title}>Daftar Akun Baru</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#b2aaf7"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Konfirmasi Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#b2aaf7"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      {loading ? (
-        <ActivityIndicator size="large" style={styles.button} />
-      ) : (
-        <Button title="Daftar" onPress={handleSignup} />
-      )}
+        <TextInput
+          style={styles.input}
+          placeholder="Konfirmasi Password"
+          placeholderTextColor="#b2aaf7"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
 
-      <View style={styles.loginContainer}>
-        <Text>Sudah punya akun? </Text>
-        <TouchableOpacity onPress={() => router.push("/Login")}>
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator size="large" color="#6c5ce7" style={styles.button} />
+        ) : (
+          <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+            <Text style={styles.signupButtonText}>Daftar</Text>
+          </TouchableOpacity>
+        )}
+
+        <View style={styles.loginContainer}>
+          <Text style={styles.loginLabel}>Sudah punya akun? </Text>
+          <TouchableOpacity onPress={() => router.push("/Login")}>
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -99,36 +115,99 @@ export default function Signup() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: "#6c5ce7",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  headerBg: {
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 10,
+    marginTop: 40,
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginBottom: 8,
+    tintColor: "#fff",
+  },
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#fff",
+    letterSpacing: 2,
+    marginBottom: 10,
+  },
+  formCard: {
+    width: "100%",
+    maxWidth: 370,
+    backgroundColor: "#fff",
+    borderRadius: 18,
+    padding: 24,
+    shadowColor: "#6c5ce7",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+    elevation: 8,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "#6c5ce7",
+    marginBottom: 18,
     textAlign: "center",
+    letterSpacing: 1,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: "#6c5ce7",
+    padding: 12,
+    marginBottom: 14,
+    borderRadius: 8,
+    fontSize: 16,
+    color: "#222",
+    backgroundColor: "#f7f6fd",
   },
   button: {
     marginTop: 10,
   },
+  signupButton: {
+    backgroundColor: "#6c5ce7",
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 6,
+    marginBottom: 8,
+    shadowColor: "#6c5ce7",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.18,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  signupButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 17,
+    letterSpacing: 1,
+  },
   errorText: {
-    color: "red",
-    marginBottom: 15,
+    color: "#ef4444",
+    marginBottom: 12,
+    textAlign: "center",
+    fontWeight: "600",
   },
   loginContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 12,
+  },
+  loginLabel: {
+    color: "#6c5ce7",
+    fontWeight: "500",
   },
   loginText: {
-    color: "blue",
+    color: "#6c5ce7",
     fontWeight: "bold",
+    textDecorationLine: "underline",
   },
-}); 
+});
